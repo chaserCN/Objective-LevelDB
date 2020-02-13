@@ -17,6 +17,7 @@
 		D0D21E131836A2C500BD1F98 /* MainTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0D21E111836A2C500BD1F98 /* MainTests.m */; };
 		D0D21E141836A2C500BD1F98 /* SnapshotsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0D21E121836A2C500BD1F98 /* SnapshotsTests.m */; };
 		D0F44C7418366BDA00AC2F1A /* Dummy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0F44C7218366BDA00AC2F1A /* Dummy.cpp */; };
+		EB9CC85523F50012002393C8 /* S2RExtensionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EB9CC85423F50012002393C8 /* S2RExtensionTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		D0D21E121836A2C500BD1F98 /* SnapshotsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotsTests.m; sourceTree = "<group>"; };
 		D0F44C7218366BDA00AC2F1A /* Dummy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dummy.cpp; sourceTree = "<group>"; };
 		D0F44C7318366BDA00AC2F1A /* Dummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dummy.h; sourceTree = "<group>"; };
+		EB9CC85423F50012002393C8 /* S2RExtensionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = S2RExtensionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 		D0027B5A18341F8A002E8D7E = {
 			isa = PBXGroup;
 			children = (
+				EB9CC85423F50012002393C8 /* S2RExtensionTests.m */,
 				D00862FC1835228400086A71 /* BaseTestClass.h */,
 				D00862F91835225500086A71 /* BaseTestClass.m */,
 				D0D21E111836A2C500BD1F98 /* MainTests.m */,
@@ -173,6 +176,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = D0027B5A18341F8A002E8D7E;
@@ -225,6 +229,7 @@
 				D0F44C7418366BDA00AC2F1A /* Dummy.cpp in Sources */,
 				D00862FE18354BF800086A71 /* WritebatchTests.m in Sources */,
 				D0D21E141836A2C500BD1F98 /* SnapshotsTests.m in Sources */,
+				EB9CC85523F50012002393C8 /* S2RExtensionTests.m in Sources */,
 				D0D21E131836A2C500BD1F98 /* MainTests.m in Sources */,
 				D00862FA1835225500086A71 /* BaseTestClass.m in Sources */,
 			);

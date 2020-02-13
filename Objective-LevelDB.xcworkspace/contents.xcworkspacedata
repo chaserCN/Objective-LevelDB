@@ -17,10 +17,16 @@
          location = "group:LDBWriteBatch.h">
       </FileRef>
       <FileRef
+         location = "group:LDBWritebatch+s2r.h">
+      </FileRef>
+      <FileRef
          location = "group:LDBWriteBatch.mm">
       </FileRef>
       <FileRef
          location = "group:LevelDB.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/yarohort/Projects/uniweb/Objective-LevelDB/Classes/LevelDB+s2r.h">
       </FileRef>
       <FileRef
          location = "group:LevelDB.mm">

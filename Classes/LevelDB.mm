@@ -6,6 +6,7 @@
 //
 
 #import "LevelDB.h"
+#import "LevelDB+s2r.h"
 #import "LDBSnapshot.h"
 #import "LDBWriteBatch.h"
 
@@ -680,6 +681,67 @@ LevelDBOptions MakeLevelDBOptions() {
     if (_encoder) [_encoder release];
     if (_decoder) [_decoder release];
     [super dealloc];
+}
+
+@end
+
+
+
+
+@implementation LevelDB (LevelDB_s2r)
+
+- (void)setString:(NSString *)aString forKey:(int64_t)aKey {
+    AssertDBExists(db);
+    NSParameterAssert(aString != nil);
+    
+    leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+ 
+    leveldb::Slice v = SliceFromString(aString);
+    
+    leveldb::Status status = db->Put(writeOptions, k, v);
+    
+    if(!status.ok()) {
+        NSLog(@"Problem storing key/value pair in database: %s", status.ToString().c_str());
+    }
+}
+
+- (void)removeStringForKey:(int64_t)aKey {
+    AssertDBExists(db);
+    
+    leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+    leveldb::Status status = db->Delete(writeOptions, k);
+    
+    if(!status.ok()) {
+        NSLog(@"Problem deleting key/value pair in database: %s", status.ToString().c_str());
+    }
+}
+
+- (void)enumerateInt64KeysAndStringsUsingBlock:(LevelDBInt64KeyStringValueBlock)aBlock {
+    AssertDBExists(db);
+    leveldb::Iterator* iter = db->NewIterator(readOptions);
+    leveldb::Slice lkey;
+    BOOL stop = false;
+    
+   LevelDBValueGetterBlock getter;
+    for ([self _startIterator:iter backward:false prefix:nil start:nil]
+         ; iter->Valid()
+         ; MoveCursor(iter, false)) {
+        
+        lkey = iter->key();
+        
+        if (lkey.size() != sizeof(int64_t)) {
+            continue;
+        }
+        
+        int64_t key;
+        memcpy(&key, lkey.data(), sizeof(int64_t));
+        
+        NSString *value = StringFromSlice(iter->value());
+        
+        aBlock(key, value);
+    }
+    
+    delete iter;
 }
 
 @end

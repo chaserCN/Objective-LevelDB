@@ -106,3 +106,20 @@
 }
 
 @end
+
+
+
+
+@implementation LDBWritebatch (LevelDB_s2r)
+
+- (void)setString:(NSString *)aString forKey:(int64_t)aKey {
+    dispatch_sync(_serial_queue, ^{
+        leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+        
+        leveldb::Slice v = SliceFromString(aString);
+         
+        _writeBatch.Put(k, v);
+    });
+}
+
+@end
