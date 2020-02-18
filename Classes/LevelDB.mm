@@ -737,9 +737,7 @@ LevelDBOptions MakeLevelDBOptions() {
     AssertDBExists(db);
     leveldb::Iterator* iter = db->NewIterator(readOptions);
     leveldb::Slice lkey;
-    BOOL stop = false;
     
-   LevelDBValueGetterBlock getter;
     for ([self _startIterator:iter backward:false prefix:nil start:nil]
          ; iter->Valid()
          ; MoveCursor(iter, false)) {
