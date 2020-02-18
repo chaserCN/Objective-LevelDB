@@ -716,6 +716,23 @@ LevelDBOptions MakeLevelDBOptions() {
     }
 }
 
+- (NSString *)stringForKey:(int64_t)aKey {
+    AssertDBExists(db);
+
+    std::string v_string;
+
+    leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+    leveldb::Status status = db->Get(readOptions, k, &v_string);
+    
+    if (!status.ok()) {
+        if (!status.IsNotFound())
+            NSLog(@"Problem retrieving value for key %lld from database: %s", aKey, status.ToString().c_str());
+        return nil;
+    }
+    
+    return StringFromSlice(v_string);
+}
+
 - (void)enumerateInt64KeysAndStringsUsingBlock:(LevelDBInt64KeyStringValueBlock)aBlock {
     AssertDBExists(db);
     leveldb::Iterator* iter = db->NewIterator(readOptions);

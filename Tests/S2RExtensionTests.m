@@ -78,6 +78,14 @@
     return  result;
 }
 
+- (void)testReading {
+    [db setString:@"first" forKey:1];
+    [db setString:@"some other" forKey:0xAABBCCDDEEFF0011];
+    
+    XCTAssertEqualObjects([db stringForKey:1], @"first");
+    XCTAssertEqualObjects([db stringForKey:0xAABBCCDDEEFF0011], @"some other");
+}
+
 - (void)testSpeed1 {
     NSArray<Position*> *positions = [self positions];
     

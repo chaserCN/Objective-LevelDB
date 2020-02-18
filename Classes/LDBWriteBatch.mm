@@ -122,4 +122,12 @@
     });
 }
 
+- (void)removeStringForKey:(int64_t)aKey {
+    leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+    
+    dispatch_sync(_serial_queue, ^{
+        _writeBatch.Delete(k);
+    });
+}
+
 @end

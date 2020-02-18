@@ -17,6 +17,8 @@ typedef void     (^LevelDBInt64KeyStringValueBlock)   (int64_t key, NSString *va
 
 - (void)setString:(NSString *)aString forKey:(int64_t)aKey;
 - (void)removeStringForKey:(int64_t)aKey;
+
+- (NSString *)stringForKey:(int64_t)aKey;
 - (void)enumerateInt64KeysAndStringsUsingBlock:(LevelDBInt64KeyStringValueBlock)aBlock;
 
 @end
