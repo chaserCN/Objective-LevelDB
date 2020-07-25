@@ -705,10 +705,36 @@ LevelDBOptions MakeLevelDBOptions() {
     }
 }
 
+- (void)setString:(NSString *)aString forStringKey:(NSString *)aKey {
+    AssertDBExists(db);
+    NSParameterAssert(aString != nil);
+    
+    leveldb::Slice k = SliceFromString(aKey);
+    
+    leveldb::Slice v = SliceFromString(aString);
+    
+    leveldb::Status status = db->Put(writeOptions, k, v);
+    
+    if(!status.ok()) {
+        NSLog(@"Problem storing key/value pair in database: %s", status.ToString().c_str());
+    }
+}
+
 - (void)removeStringForKey:(int64_t)aKey {
     AssertDBExists(db);
     
     leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+    leveldb::Status status = db->Delete(writeOptions, k);
+    
+    if(!status.ok()) {
+        NSLog(@"Problem deleting key/value pair in database: %s", status.ToString().c_str());
+    }
+}
+
+- (void)removeStringForStringKey:(NSString *)aKey {
+    AssertDBExists(db);
+    
+    leveldb::Slice k = SliceFromString(aKey);
     leveldb::Status status = db->Delete(writeOptions, k);
     
     if(!status.ok()) {
@@ -733,6 +759,23 @@ LevelDBOptions MakeLevelDBOptions() {
     return StringFromSlice(v_string);
 }
 
+- (NSString *)stringForStringKey:(NSString *)aKey {
+    AssertDBExists(db);
+
+    std::string v_string;
+
+    leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
+    leveldb::Status status = db->Get(readOptions, k, &v_string);
+    
+    if (!status.ok()) {
+        if (!status.IsNotFound())
+            NSLog(@"Problem retrieving value for key %@ from database: %s", aKey, status.ToString().c_str());
+        return nil;
+    }
+    
+    return StringFromSlice(v_string);
+}
+
 - (void)enumerateInt64KeysAndStringsUsingBlock:(LevelDBInt64KeyStringValueBlock)aBlock {
     AssertDBExists(db);
     leveldb::Iterator* iter = db->NewIterator(readOptions);
@@ -751,6 +794,24 @@ LevelDBOptions MakeLevelDBOptions() {
         int64_t key;
         memcpy(&key, lkey.data(), sizeof(int64_t));
         
+        NSString *value = StringFromSlice(iter->value());
+        
+        aBlock(key, value);
+    }
+    
+    delete iter;
+}
+
+- (void)enumerateStringKeysAndStringsUsingBlock:(LevelDBStringKeyStringValueBlock)aBlock {
+    AssertDBExists(db);
+    leveldb::Iterator* iter = db->NewIterator(readOptions);
+    leveldb::Slice lkey;
+    
+    for ([self _startIterator:iter backward:false prefix:nil start:nil]
+         ; iter->Valid()
+         ; MoveCursor(iter, false)) {
+        
+        NSString *key = StringFromSlice(iter->key());
         NSString *value = StringFromSlice(iter->value());
         
         aBlock(key, value);
