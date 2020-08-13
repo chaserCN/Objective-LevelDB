@@ -122,6 +122,16 @@
     });
 }
 
+- (void)setString:(NSString *)aString forStringKey:(NSString *)aKey {
+    dispatch_sync(_serial_queue, ^{
+        leveldb::Slice k = SliceFromString(aKey);
+        
+        leveldb::Slice v = SliceFromString(aString);
+         
+        _writeBatch.Put(k, v);
+    });
+}
+
 - (void)removeStringForKey:(int64_t)aKey {
     leveldb::Slice k = leveldb::Slice((char *)&aKey, sizeof(aKey));
     
